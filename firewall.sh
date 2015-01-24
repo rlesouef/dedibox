@@ -21,7 +21,7 @@
 # Configuration
 ##########################
  
-SSH_PORT="$SSH_PORT"
+SSH_PORT="22"
 FTP_PORT="21"
 DNS_PORT="53"
 MAIL_PORT="25"
@@ -29,7 +29,7 @@ NTP_PORT="123"
 HTTP_PORT="80"
 HTTPS_PORT="443"
  
-HN_IP="$ADR_IPPUB"
+HN_IP="1.2.3.4"
  
  
 ##########################
