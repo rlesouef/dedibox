@@ -17,7 +17,7 @@ ou
 Placez vous tout d'abord dans le répertoire /tmp par exemple:
 
     $ cd /tmp
-    $ git https://github.com/rlesouef/dedibox
+    $ git clone https://github.com/rlesouef/dedibox
     $ cd dedibox/
     $ chmod o+x secureSrv.sh
     $ ./secureSrv.sh
