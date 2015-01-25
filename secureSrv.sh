@@ -130,10 +130,9 @@ continuer
 
 # firewall
 echo -e "\n--- Firewall"
-git clone https://github.com/rlesouef/dedibox ~/dedibox
-sed -i 's/PORT="22"/Port="'$PORT_SSH'"/g' ~/dedibox/firewall.sh
-sed -i 's/HN_IP="1.2.3.4"/HN_IP="'$ADR_IPPUB'"/g' ~/dedibox/firewall.sh
-cp ~/dedibox/firewall.sh /etc/init.d/firewall.sh
+sed -i 's/PORT="22"/Port="'$PORT_SSH'"/g' firewall.sh
+sed -i 's/HN_IP="1.2.3.4"/HN_IP="'$ADR_IPPUB'"/g' firewall.sh
+cp firewall.sh /etc/init.d/firewall.sh
 chmod +x /etc/init.d/firewall.sh
 update-rc.d firewall.sh defaults
 /etc/init.d/firewall restart
@@ -192,9 +191,18 @@ echo -e "\n--- LOGWATCH"
 /usr/bin/apt-get -y --force-yes install logwatch
 sed -i 's/logwatch --output mail/logwatch --output mail --mailto '$ADR_MAIL' --detail high/g' /etc/cron.daily/00logwatch
 
-echo "--- "
-echo "- Ne pas oublier de reconfigurer 'debconf'"
-echo "  > dpkg-reconfigure debconf"
-echo "  > Selectionner [Dialog] puis [Hihgt]"
+echo "Autres action à faire si besoin:"
+echo "- Securisé le serveur avec un Firewall"
+echo "  > http://www.debian.org/doc/manuals/securing-debian-howto/ch-sec-services.en.html"
+echo "  > https://raw.github.com/nicolargo/debianpostinstall/master/firewall.sh"
+echo "- Securisé le daemon SSH"
+echo "  > http://www.debian-administration.org/articles/455"
+echo "- Permettre l'envoi de mail"
+echo "  > http://blog.nicolargo.com/2011/12/debian-et-les-mails-depuis-la-ligne-de-commande.html"
+
+# Fin du script
+echo "Ne pas oublier de reconfigurer 'debconf'"
+echo -e "\tdpkg-reconfigure debconf"
+echo -e "\tSelectionner [Dialog] puis [Hihgt]"
 
 exit 0
