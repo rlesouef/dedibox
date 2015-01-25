@@ -16,7 +16,7 @@ fi
 
 # Fonctions
 #-----------------------------------
-sauve_fic() {
+sauveFic() {
   if [ ! -f ${1} ]; then
       echo "ERREUR: $1 inexistant!!!"
     fi
@@ -115,7 +115,7 @@ echo -e "\n--- Installation paquets"
 # SSH
 echo -e "\n--- SSH"
 # /usr/bin/apt-get -y --force-yes install openssh-server
-sauve_fic '/etc/ssh/sshd_config'
+sauveFic '/etc/ssh/sshd_config'
 sed -i 's/Port 22/Port '$PORT_SSH'/g' /etc/ssh/sshd_config
 sed -i 's/PermitRootLogin without-password/PermitRootLogin no/g' /etc/ssh/sshd_config
 sed -i 's/X11Forwarding yes/X11Forwarding no/g' /etc/ssh/sshd_config
