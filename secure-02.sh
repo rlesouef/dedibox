@@ -16,7 +16,7 @@ fi
 
 # Fonctions
 #-----------------------------------
-sauve_fic() {
+sauveFic() {
   if [ ! -f ${1} ]; then
       echo "ERREUR: $1 inexistant!!!"
     fi
@@ -91,7 +91,7 @@ pose
 echo -e "\n--- Postfix"
 /usr/bin/apt-get remove -y --force-yes --purge postfix mailutils
 /usr/bin/apt-get -y --force-yes install postfix mailutils
-sauve_fic '/etc/aliases'
+sauveFic '/etc/aliases'
 echo "root: $ADR_MAIL" >> /etc/aliases
 newaliases
 service postfix restart
@@ -103,8 +103,8 @@ pose
 echo -e "\n--- Fail2ban"
 /usr/bin/apt-get remove -y --force-yes --purge fail2ban
 /usr/bin/apt-get -y --force-yes install fail2ban
-sauve_fic '/etc/fail2ban/jail.conf'
-sauve_fic '/etc/fail2ban/jail.local'
+sauveFic '/etc/fail2ban/jail.conf'
+sauveFic '/etc/fail2ban/jail.local'
 cat <<EOF >/etc/fail2ban/jail.local
 [DEFAULT]
 ignoreip = 127.0.0.1/8
@@ -138,7 +138,7 @@ pose
 echo -e "\n--- CRON-APT"
 /usr/bin/apt-get remove -y --force-yes --purge cron-apt
 /usr/bin/apt-get -y --force-yes install cron-apt
-sauve_fic '/etc/cron-apt/config'
+sauveFic '/etc/cron-apt/config'
 sed -i 's/# MAILTO="root"/MAILTO="'$ADR_MAIL'"/g' /etc/cron-apt/config
 
 pose
