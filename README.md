@@ -16,6 +16,7 @@ ou
 
 Se placer dans le répertoire /tmp par exemple, et en root (sudo su):
 
+    # rm -R /tmp/dedibox
     # cd /tmp
     # git clone https://github.com/rlesouef/dedibox
     # cd dedibox/
