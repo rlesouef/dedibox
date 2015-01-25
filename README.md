@@ -14,13 +14,13 @@ ou
 
 ## Récuperation du script
 
-Placez vous tout d'abord dans le répertoire /tmp par exemple:
+Se placer dans le répertoire /tmp par exemple, et en root (sudo su):
 
-    $ cd /tmp
-    $ git clone https://github.com/rlesouef/dedibox
-    $ cd dedibox/
-    $ chmod o+x secureSrv.sh
-    $ ./secureSrv.sh
+    # cd /tmp
+    # git clone https://github.com/rlesouef/dedibox
+    # cd dedibox/
+    # chmod o+x secureSrv.sh
+    # ./secureSrv.sh
 
 Le script va automatiquement lancer l'installation des paquets nécessaires à la sécurisation du serveur.
-Répondez simplement aux questions qui vous seront posées.
+Répondre simplement aux questions posées...
