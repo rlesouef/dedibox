@@ -1,7 +1,7 @@
 #!/bin/bash
 # Mon script de post installation dedibox
 #
-# Open Source Services - 01/2015
+# Nicolargo - 12/2011
 # GPL
 #
 # Syntaxe: # su - -c "./dediboxpostinstall.sh"
@@ -13,7 +13,6 @@
 sauve_fic() {
   if [ ! -f ${1} ]; then
       echo "ERREUR: $1 inexistant!!!"
-      exit 1
     fi
   if [ ! -f ${1}.0 ]; then
       cp ${1} ${1}.0
@@ -141,8 +140,8 @@ continuer
 
 # postfix
 echo -e "\n--- Postfix"
-/usr/bin/apt-get remove -y --force-yes --purge postfix
-/usr/bin/apt-get -y --force-yes install postfix
+/usr/bin/apt-get remove -y --force-yes --purge postfix mailutils
+/usr/bin/apt-get -y --force-yes install postfix mailutils
 sauve_fic '/etc/aliases'
 echo "root: $ADR_MAIL" >> /etc/aliases
 newaliases
