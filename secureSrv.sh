@@ -1,7 +1,7 @@
 #!/bin/bash
 # Mon script de post installation dedibox
 #
-# Nicolargo - 12/2011
+# Open Source Services - 01/2015
 # GPL
 #
 # Syntaxe: # su - -c "./dediboxpostinstall.sh"
@@ -143,7 +143,7 @@ continuer
 echo -e "\n--- Postfix"
 /usr/bin/apt-get remove -y --force-yes --purge postfix
 /usr/bin/apt-get -y --force-yes install postfix
-sauve_fiv '/etc/aliases'
+sauve_fic '/etc/aliases'
 echo "root: $ADR_MAIL" >> /etc/aliases
 newaliases
 service postfix restart
@@ -155,8 +155,8 @@ continuer
 echo -e "\n--- Fail2ban"
 /usr/bin/apt-get remove -y --force-yes --purge fail2ban
 /usr/bin/apt-get -y --force-yes install fail2ban
-sauve_fiv '/etc/fail2ban/jail.conf'
-sauve_fiv '/etc/fail2ban/jail.local'
+sauve_fic '/etc/fail2ban/jail.conf'
+sauve_fic '/etc/fail2ban/jail.local'
 cat <<EOF >/etc/fail2ban/jail.local
 [DEFAULT]
 ignoreip = 127.0.0.1/8
