@@ -130,12 +130,12 @@ continuer
 
 # firewall
 echo -e "\n--- Firewall"
-sed -i 's/PORT="22"/Port="'$PORT_SSH'"/g' firewall.sh
-sed -i 's/HN_IP="1.2.3.4"/HN_IP="'$ADR_IPPUB'"/g' firewall.sh
+sed -i 's/^SSH_PORT=.*$/SSH_PORT="'$PORT_SSH'"/g' firewall.sh
+sed -i 's/^HN_IP=.*$/HN_IP="'$ADR_IPPUB'"/g' firewall.sh
 cp firewall.sh /etc/init.d/firewall.sh
 chmod +x /etc/init.d/firewall.sh
 update-rc.d firewall.sh defaults
-/etc/init.d/firewall restart
+/etc/init.d/firewall.sh restart
 
 continuer
 
