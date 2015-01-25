@@ -141,10 +141,10 @@ continuer
 
 # postfix
 echo -e "\n--- Postfix"
+/usr/bin/apt-get remove -y --force-yes --purge postfix
 /usr/bin/apt-get -y --force-yes install postfix
 sauve_fiv '/etc/aliases'
 echo "root: $ADR_MAIL" >> /etc/aliases
-echo "root: oss974+dedibox@oss974.com" >> /etc/aliases
 newaliases
 service postfix restart
 echo 'Ceci est test!' | mail -s 'Test Postfix' root
@@ -153,8 +153,10 @@ continuer
 
 # fail2ban
 echo -e "\n--- Fail2ban"
+/usr/bin/apt-get remove -y --force-yes --purge fail2ban
 /usr/bin/apt-get -y --force-yes install fail2ban
 sauve_fiv '/etc/fail2ban/jail.conf'
+sauve_fiv '/etc/fail2ban/jail.local'
 cat <<EOF >/etc/fail2ban/jail.local
 [DEFAULT]
 ignoreip = 127.0.0.1/8
@@ -180,6 +182,7 @@ continuer
 
 # cron-apt
 echo -e "\n--- CRON-APT"
+/usr/bin/apt-get remove -y --force-yes --purge cron-apt
 /usr/bin/apt-get -y --force-yes install cron-apt
 sauve_fic '/etc/cron-apt/config'
 sed -i 's/# MAILTO="root"/MAILTO="'$ADR_MAIL'"/g' /etc/cron-apt/config
@@ -188,21 +191,20 @@ continuer
 
 # logwatch
 echo -e "\n--- LOGWATCH"
+/usr/bin/apt-get remove -y --force-yes --purge logwatch
 /usr/bin/apt-get -y --force-yes install logwatch
 sed -i 's/logwatch --output mail/logwatch --output mail --mailto '$ADR_MAIL' --detail high/g' /etc/cron.daily/00logwatch
 
-echo "Autres action à faire si besoin:"
-echo "- Securisé le serveur avec un Firewall"
-echo "  > http://www.debian.org/doc/manuals/securing-debian-howto/ch-sec-services.en.html"
-echo "  > https://raw.github.com/nicolargo/debianpostinstall/master/firewall.sh"
-echo "- Securisé le daemon SSH"
-echo "  > http://www.debian-administration.org/articles/455"
-echo "- Permettre l'envoi de mail"
-echo "  > http://blog.nicolargo.com/2011/12/debian-et-les-mails-depuis-la-ligne-de-commande.html"
-
-# Fin du script
-echo "Ne pas oublier de reconfigurer 'debconf'"
-echo -e "\tdpkg-reconfigure debconf"
-echo -e "\tSelectionner [Dialog] puis [Hihgt]"
+echo " "
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "- Ne pas oublier de reconfigurer 'debconf'"
+echo "  > dpkg-reconfigure debconf"
+echo "  > Selectionner [Dialog] puis [Hihgt]"
+echo "- Connexion SSH:"
+echo "  > port SSH = $PORT_SSH"
+echo "  > utilisateur = $USER_NAME"
+echo "- Les mails du systeme seront envoyés sur:"
+echo "  > $ADR_MAIL"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
 
 exit 0
