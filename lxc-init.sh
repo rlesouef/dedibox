@@ -103,5 +103,10 @@ Lxc-ls --fancy
 # apt-get install nano
 # ...
 # [CTRL+A] puis [Q] pour quitter lxc-console et revenir sur le host
-
+# 
+# Demarrage automatique
+# nano /var/lib/lxc/nomConteneur/config
+# lxc.start.auto = 1
+# lxc.start.order = x
+# lxc.start.delay = x
 exit 0
