@@ -86,4 +86,22 @@ lxc-start -d -n perso
 
 Lxc-ls --fancy
 
+# Pour chaque conteneur:
+# ---------------------------
+# lxc-console -n nomConteneur
+# ubuntu / ubuntu
+# sudo su
+# adduser nomUser
+# usermod -a -G sudo nomUser
+# exit ou [CTRL+D]
+# exit ou [CTRL+D]
+# login: nomUser / pwdUser
+# sudo su
+# deluser ubuntu --remove-home
+# apt-get update
+# apt-get dist-upgrade
+# apt-get install nano
+# ...
+# [CTRL+A] puis [Q] pour quitter lxc-console et revenir sur le host
+
 exit 0
