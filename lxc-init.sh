@@ -56,7 +56,6 @@ sauveFic '/etc/default/lxc-net'
 sed -i 's/LXC_ADDR="10.0.3.1"/LXC_ADDR="10.0.3.254"/g' /etc/default/lxc-net
 sed -i 's/#LXC_DHCP_CONFILE=/LXC_DHCP_CONFILE=/g' /etc/default/lxc-net
 sauveFic '/etc/lxc/dnsmasq.conf'
-nano /etc/lxc/dnsmasq.conf
 cat <<EOF >/etc/lxc/dnsmasq.conf
 dhcp-host=proxy,10.0.3.100
 dhcp-host=web,10.0.3.101
@@ -88,5 +87,7 @@ echo -e "\n--- Création du conteneur 'perso'"
 lxc-create -t ubuntu -n perso
 lxc-start -d -n perso
 lxc-console -n perso
+
+Lxc-ls --fancy
 
 exit 0
