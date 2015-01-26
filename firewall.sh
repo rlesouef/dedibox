@@ -122,8 +122,8 @@ fw_clear_ip6(){
 case "$1" in
         start|restart)
                 echo -n "Starting firewall.."
-                fw_stop_ip6
-                fw_stop
+                # fw_stop_ip6
+                # fw_stop
                 fw_start
                 echo "done."
                 ;;
