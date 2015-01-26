@@ -68,25 +68,21 @@ service lxc-net restart
 echo -e "\n--- Création du conteneur 'proxy'"
 lxc-create -t ubuntu -n proxy
 lxc-start -d -n proxy
-lxc-console -n proxy
 
 # Conteneur 'web'
 echo -e "\n--- Création du conteneur 'web'"
 lxc-create -t ubuntu -n web
 lxc-start -d -n web
-lxc-console -n web
 
 # Conteneur 'odoo'
 echo -e "\n--- Création du conteneur 'odoo'"
 lxc-create -t ubuntu -n odoo
 lxc-start -d -n odoo
-lxc-console -n odoo
 
 # Conteneur 'perso'
 echo -e "\n--- Création du conteneur 'perso'"
 lxc-create -t ubuntu -n perso
 lxc-start -d -n perso
-lxc-console -n perso
 
 Lxc-ls --fancy
 
