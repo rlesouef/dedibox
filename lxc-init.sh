@@ -100,7 +100,7 @@ Lxc-ls --fancy
 # deluser ubuntu --remove-home
 # apt-get update
 # apt-get dist-upgrade
-# apt-get install nano
+# apt-get install nano wget git iptables aptitude
 # ...
 # [CTRL+A] puis [Q] pour quitter lxc-console et revenir sur le host
 # 
