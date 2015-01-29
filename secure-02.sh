@@ -89,9 +89,10 @@ pose
 
 # postfix
 echo -e "\n--- Postfix"
-/usr/bin/apt-get remove -y --force-yes --purge postfix mailutils
-/usr/bin/apt-get -y --force-yes install postfix mailutils
+/usr/bin/apt-get remove -y --force-yes --purge postfix heirloom-mailx
+/usr/bin/apt-get -y --force-yes install postfix heirloom-mailx
 sauveFic '/etc/aliases'
+echo "oss974: root" >> /etc/aliases
 echo "root: $ADR_MAIL" >> /etc/aliases
 newaliases
 service postfix restart
@@ -134,20 +135,43 @@ service fail2ban restart
 
 pose
 
+# chkrootkit
+echo -e "\n--- CHKROOTKIT"
+/usr/bin/apt-get remove -y --force-yes --purge chkrootkit
+/usr/bin/apt-get -y --force-yes install chkrootkit
+sauveFic '/etc/chkrootkit.conf'
+# Vérification des modifications quotidienne :
+sed -i 's/RUN_DAILY="false"/RUN_DAILY="true"/; s/DIFF_MODE="false"/DIFF_MODE="true"/' /etc/chkrootkit.conf
+echo "pour aller plus loin, voir"
+echo "RKHUNTER ou TIGER (qui utilise tripwire pour la signature des binaires et JOHN pour la sécurité des mots de passe)"
+
+pose
+
+# logcheck :
+echo -e "\n--- LOGCHECK"
+/usr/bin/apt-get remove -y --force-yes --purge logcheck
+/usr/bin/apt-get -y --force-yes install logcheck
+sauveFic '/etc/logcheck/logcheck.conf'
+sed -i 's/SENDMAILTO="logcheck"/SENDMAILTO="'$ADR_MAIL'"/g' /etc/logcheck/logcheck.conf
+# vérification quotidienne
+sed -i 's/2 \* \* \* \*/59 23 * * */' /etc/cron.d/logcheck
+
+pose
+
 # cron-apt
 echo -e "\n--- CRON-APT"
 /usr/bin/apt-get remove -y --force-yes --purge cron-apt
 /usr/bin/apt-get -y --force-yes install cron-apt
 sauveFic '/etc/cron-apt/config'
-sed -i 's/# MAILTO="root"/MAILTO="'$ADR_MAIL'"/g' /etc/cron-apt/config
+# Mise à jour de sécurité uniquement :
+grep security /etc/apt/sources.list > /etc/apt/sources.list.d/security.list
+echo 'OPTIONS="-o quiet=1 -o Dir::Etc::SourceList=/etc/apt/sources.list.d/security.list"' >> /etc/cron-apt/config
+# Mise à jour uniquement : 
+echo 'MAILON="upgrade"' >> /etc/cron-apt/config
+# Envoyé par email à root : 
+echo 'MAILTO="root"' >> /etc/cron-apt/config
 
 pose
-
-# logwatch
-echo -e "\n--- LOGWATCH"
-/usr/bin/apt-get remove -y --force-yes --purge logwatch
-/usr/bin/apt-get -y --force-yes install logwatch
-sed -i 's/logwatch --output mail/logwatch --output mail --mailto '$ADR_MAIL' --detail high/g' /etc/cron.daily/00logwatch
 
 echo -e "\n "
 echo "- Ne pas oublier de reconfigurer 'debconf'"
