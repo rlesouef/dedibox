@@ -168,11 +168,14 @@ echo -e "\n--- CRON-APT"
 sauveFic '/etc/cron-apt/config'
 # Mise à jour de sécurité uniquement :
 grep security /etc/apt/sources.list > /etc/apt/sources.list.d/security.list
-echo 'OPTIONS="-o quiet=1 -o Dir::Etc::SourceList=/etc/apt/sources.list.d/security.list"' >> /etc/cron-apt/config
-# Mise à jour uniquement : 
-echo 'MAILON="upgrade"' >> /etc/cron-apt/config
-# Envoyé par email à root : 
-echo 'MAILTO="root"' >> /etc/cron-apt/config
+cat <<EOF >/etc/cron-apt/config
+APTCOMMAND=/usr/bin/aptitude
+OPTIONS="-o quiet=1 -o Dir::Etc::SourceList=/etc/apt/sources.list.d/security.list"
+MAILTO="$ADR_MAIL"
+MAILON="always"
+EOF
+sed -i 's/dist-upgrade -d -y -o/dist-upgrade -y -o/' /etc/cron-apt/action.d/3-download
+echo "adapter /etc/cron.d/cron-apt"
 
 pose
 
