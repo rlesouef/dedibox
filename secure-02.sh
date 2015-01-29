@@ -19,13 +19,14 @@ fi
 sauveFic() {
   if [ ! -f ${1} ]; then
       echo "ERREUR: $1 inexistant!!!"
-    fi
-  if [ ! -f ${1}.0 ]; then
+  else
+    if [ ! -f ${1}.0 ]; then
       cp ${1} ${1}.0
       echo "$1 sauvegardé"
-  else
-    cp ${1}.0 ${1}
-    echo "$1 restauré"
+    else
+      cp ${1}.0 ${1}
+      echo "$1 restauré"
+    fi
   fi
 }
 
@@ -91,7 +92,9 @@ pose
 echo -e "\n--- Postfix"
 /usr/bin/apt-get remove -y --force-yes --purge postfix heirloom-mailx
 /usr/bin/apt-get -y --force-yes install postfix heirloom-mailx
+sauveFic '/etc/postfix/main.cf'
 sauveFic '/etc/aliases'
+sed -i 's/inet_interfaces = all/inet_interfaces = loopback-only/' /etc/postfix/main.cf
 echo "oss974: root" >> /etc/aliases
 echo "root: $ADR_MAIL" >> /etc/aliases
 newaliases
