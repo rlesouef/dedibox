@@ -110,7 +110,7 @@ update-locale LANG=fr_FR.UTF-8
 
 # Installation de paquets
 echo -e "\n--- Installation paquets"
-/usr/bin/apt-get -y --force-yes install git
+/usr/bin/apt-get -y --force-yes install git bash-completion
 
 # SSH
 echo -e "\n--- SSH"
