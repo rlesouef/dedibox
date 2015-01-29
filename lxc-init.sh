@@ -50,63 +50,111 @@ pose
 
 # LXC
 echo -e "\n--- Installation Lxc"
-/usr/bin/apt-get remove -y --force-yes --purge lxc
-/usr/bin/apt-get -y --force-yes install lxc
+sauveFic '/etc/fstab'
+echo 'cgroup /sys/fs/cgroup cgroup defaults 0 0' >> /etc/fstab
+mount /sys/fs/cgroup
+apt-get update
+/usr/bin/apt-get remove -y --force-yes --purge lxc bridge-utils
+/usr/bin/apt-get -y --force-yes install lxc bridge-utils
+lxc-checkconfig
+
+pose
+
 sauveFic '/etc/default/lxc-net'
 sed -i 's/LXC_ADDR="10.0.3.1"/LXC_ADDR="10.0.3.254"/g' /etc/default/lxc-net
 sed -i 's/#LXC_DHCP_CONFILE=/LXC_DHCP_CONFILE=/g' /etc/default/lxc-net
 sauveFic '/etc/lxc/dnsmasq.conf'
 cat <<EOF >/etc/lxc/dnsmasq.conf
-dhcp-host=proxy,10.0.3.100
-dhcp-host=web,10.0.3.101
-dhcp-host=odoo,10.0.3.102
-dhcp-host=perso,10.0.3.103
+dhcp-host=srv-dns,10.0.3.100
+dhcp-host=srv-proxy,10.0.3.101
+dhcp-host=srv-mail,10.0.3.102
+dhcp-host=web,10.0.3.110
+dhcp-host=perso,10.0.3.120
+dhcp-host=odoo,10.0.3.130
 EOF
+
 service lxc-net restart
 
-# Conteneur 'proxy'
-echo -e "\n--- Création du conteneur 'proxy'"
-lxc-create -t ubuntu -n proxy
-lxc-start -d -n proxy
-
-# Conteneur 'web'
-echo -e "\n--- Création du conteneur 'web'"
+lxc-create -t ubuntu -n srv-dns
+lxc-create -t ubuntu -n srv-proxy
+lxc-create -t ubuntu -n srv-mail
 lxc-create -t ubuntu -n web
-lxc-start -d -n web
-
-# Conteneur 'odoo'
-echo -e "\n--- Création du conteneur 'odoo'"
-lxc-create -t ubuntu -n odoo
-lxc-start -d -n odoo
-
-# Conteneur 'perso'
-echo -e "\n--- Création du conteneur 'perso'"
 lxc-create -t ubuntu -n perso
+lxc-create -t ubuntu -n odoo
+
+cat <<EOF >>/var/lib/lxc/srv-dns/config
+
+lxc.start.auto = 1
+lxc.start.order = 1
+lxc.start.delay = 0
+EOF
+
+cat <<EOF >>/var/lib/lxc/srv-proxy/config
+
+lxc.start.auto = 1
+lxc.start.order = 2
+lxc.start.delay = 1
+EOF
+
+cat <<EOF >>/var/lib/lxc/srv-mail/config
+
+lxc.start.auto = 1
+lxc.start.order = 3
+lxc.start.delay = 1
+EOF
+
+cat <<EOF >>/var/lib/lxc/web/config
+
+lxc.start.auto = 1
+lxc.start.order = 4
+lxc.start.delay = 2
+EOF
+
+cat <<EOF >>/var/lib/lxc/perso/config
+
+lxc.start.auto = 1
+lxc.start.order = 5
+lxc.start.delay = 2
+EOF
+
+cat <<EOF >>/var/lib/lxc/odoo/config
+
+lxc.start.auto = 1
+lxc.start.order = 6
+lxc.start.delay = 2
+EOF
+
+lxc-start -d -n srv-dns
+lxc-start -d -n srv-proxy
+lxc-start -d -n srv-mail
+lxc-start -d -n web
 lxc-start -d -n perso
+lxc-start -d -n odoo
 
 Lxc-ls --fancy
 
-# Pour chaque conteneur:
-# ---------------------------
-# lxc-console -n nomConteneur
-# ubuntu / ubuntu
-# sudo su
-# adduser nomUser
-# usermod -a -G sudo nomUser
-# exit ou [CTRL+D]
-# exit ou [CTRL+D]
-# login: nomUser / pwdUser
-# sudo su
-# deluser ubuntu --remove-home
-# apt-get update
-# apt-get dist-upgrade
-# apt-get install nano wget git iptables aptitude
-# ...
-# [CTRL+A] puis [Q] pour quitter lxc-console et revenir sur le host
-# 
-# Demarrage automatique
-# nano /var/lib/lxc/nomConteneur/config
-# lxc.start.auto = 1
-# lxc.start.order = x
-# lxc.start.delay = x
+echo "Pour chaque conteneur:"
+echo "---------------------------"
+echo "lxc-console -n nomConteneur"
+echo "ubuntu / ubuntu"
+echo "sudo su"
+echo "adduser nomUser"
+echo "usermod -a -G sudo nomUser"
+echo "exit ou [CTRL+D]"
+echo "exit ou [CTRL+D]"
+echo "login: nomUser / pwdUser"
+echo "sudo su"
+echo "deluser ubuntu --remove-home"
+echo "apt-get update"
+echo "apt-get dist-upgrade"
+echo "apt-get install nano wget git iptables aptitude"
+echo "..."
+echo "[CTRL+A] puis [Q] pour quitter lxc-console et revenir sur le host"
+
+echo "Demarrage automatique"
+echo "nano /var/lib/lxc/nomConteneur/config"
+echo "lxc.start.auto = 1"
+echo "lxc.start.order = x"
+echo "lxc.start.delay = x"
+
 exit 0
