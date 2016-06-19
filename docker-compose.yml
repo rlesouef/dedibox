@@ -1,0 +1,31 @@
+#
+# Créer les répertoires:
+#
+# mkdir -p /data/adally/transmission/downloads
+# mkdir -p /data/adally/transmission/incomplete
+#
+
+sftp-ad:
+  image: rlesouef/alpine-sftp
+  volumes:
+    - /data/adally:/home/adally
+  ports:
+    - "2202:22"
+  environment:
+    - USER=vir220371
+    - PASSWORD=leeloo
+  restart: always
+
+transmission-ad:
+  image: rlesouef/alpine-transmission
+  volumes:
+    - /data/adally/transmission/downloads:/transmission/downloads
+    - /data/adally/transmission/incomplete:/transmission/incomplete
+  ports:
+    - "9002:9091"
+    - "51402:51413/tcp"
+    - "51402:51413/udp"
+  environment:
+    - USERNAME=vir220371
+    - PASSWORD=leeloo
+  restart: always
